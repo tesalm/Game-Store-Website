@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block title %} Payment error {% endblock %}
+
+{% block content %}
+
+<div class="col-lg-4 col-lg-offset-4" align="center">
+
+  <br>
+  <h2> An error occured! </h2>
+  <br>
+
+  {% if messages %}
+     <div class="messages">
+        {% for message in messages %}
+           <p class="alert alert-warning"> {{ message }} </p>
+        {% endfor %}
+     </div>
+  {% endif %}
+
+</div>
+
+{% comment %}
+    Empty page showed after an error
+{% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% for g in games %}
+<div class="col-sm6 col-md-4">
+    <a href="{% url 'play' g.game.pk %}" class="thumbnail">
+        {% if g.game.logo %}
+            {% load cloudinary %}
+            {% cloudinary g.game.logo format="jpg" width=240 height=120 crop="limit" %}
+        {% endif %}
+        <div class="caption">
+            <h3>{{ g.game.name }}</h3>
+            <p>{{ g.game.description|linebreaks|truncatechars:180 }}</p>
+        </div>
+    </a>
+</div>
+{% empty %}
+    <p style="padding-left:15px; opacity:0.4">No games</p>
+{% endfor %}

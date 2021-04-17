@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+
+{% block title %} Purchase {% endblock %}
+
+
+{% block content %}
+
+<br>
+<div class="row">
+  <div class="col-lg-6">
+  
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-info" {% endif %}>
+                {{ message }}
+            </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="form-signin">
+        <h1 class="form-signin-heading" id="local-title">Order</h1><br>
+        {% if game.banner %}
+           {% load cloudinary %}
+           {% cloudinary game.banner format="jpg" width=240 height=260 crop="limit" %}
+        {% elif not game.banner and game.logo %}
+           {% load cloudinary %}
+           {% cloudinary game.logo format="jpg" width=240 height=120 crop="limit" %}
+        {% endif %}
+
+        <p class="lead gameName">{{ game.name }} </p>
+
+        <ul class="list-group">
+            <li class="list-group-item"><h3 class="panel-title">
+               Game description
+            </h3></li>
+            <li class="list-group-item">
+               {{ game.description|linebreaks }}
+            </li>
+        </ul>
+
+        <form action="{{ action }}" method="POST" id="purchaseForm">
+            <input type="hidden" name="pid" value="{{ pid }}" />
+            <input type="hidden" name="sid" value="{{ sid }}" />
+            <input type="hidden" name="success_url"
+                    value="{{ success_url }}" />
+            <input type="hidden" name="cancel_url"
+                    value="{{ cancel_url }}" />
+            <input type="hidden" name="error_url"
+                    value="{{ error_url }}" />
+            <input type="hidden" name="checksum"
+                    value="{{ checksum }}" />
+
+            <input type="text" id="id_amount" name="amount" value="{{ amount }}"/>
+            <label for="id_amount" class="alignRight"> Amount</label>
+            <br/>
+            <br/>
+            <p>This is the last step before the payment.</p>
+            <input type="submit" class="btn btn-success" value="Continue to purchase"/>
+        </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

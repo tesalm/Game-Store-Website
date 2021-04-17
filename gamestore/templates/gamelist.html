@@ -1,0 +1,21 @@
+{% for g in games %}
+<div class="col-sm6 col-md-4">
+    <a href="{% url 'gameview' g.pk %}" class="thumbnail">
+        {% if g.logo %}
+            {% load cloudinary %}
+            {% cloudinary g.logo format="jpg" width=240 height=120 crop="limit" %}
+        {% endif %}
+        <div class="caption">
+            <h3>{{ g.name }}</h3>
+            <p>{{ g.description|linebreaks|truncatechars:180 }}</p>
+            {% if g.price == 0 %}
+                <p style="color:green;font-weight:bold"> Free To Play </p>
+            {% else %}
+                <p> {{ g.price }} € </p>
+            {% endif %}
+        </div>
+    </a>
+</div>
+{% empty %}
+    <br><h3 class="text-muted text-center">No results</p>
+{% endfor %}

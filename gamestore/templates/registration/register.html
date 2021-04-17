@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-lg-6 col-lg-offset-1">
+  <h2>Create an account</h2><br>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+          {% if field.label == "Password" %}
+            <p style="color: grey">* Your password can&#39;t be too similar to your other personal information.<br>
+            * Your password must contain at least 8 characters.<br>
+            * Your password can&#39;t be a commonly used password.<br>
+            * Your password can&#39;t be entirely numeric.</p>
+          {% else %}
+            <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <br>
+    <button class="btn btn-primary" type="submit">Sign up</button>
+    <br><br>
+  </form>
+</div>
+
+<div class="col-lg-3 col-lg-offset-1">
+  <h3>Registration</h3><br>
+  <p>If you choose to register as a developer, you'll be able to add games on our platform.</p>
+  <p>After your registration you'll receive a mail with a link used to activate your account.</p>
+</div>
+
+</div>
+{% endblock %}

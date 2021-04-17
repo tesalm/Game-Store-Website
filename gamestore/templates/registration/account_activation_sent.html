@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Email</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <small style="opacity:0.6">
+       Instead of sending out real email, this page is used to simulate one (because we did not have an e-mail server) that would be sent to the user.
+    </small>
+    <h2>Hi {{ user.username }}</h2>
+    <p>Please click on the link below to confirm your registration:</p>
+    <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}"> 
+       http://{{ domain }}{% url 'activate' uidb64=uid token=token %} </a>
+  </body>
+</html>

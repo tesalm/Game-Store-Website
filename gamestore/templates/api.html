@@ -1,0 +1,136 @@
+{% extends "main.html" %}
+
+{% block title %} Game Store JSON API v1 Documentation {% endblock %}
+
+{% block content %}
+<h2 class="page-header" id="Games">
+    Games API
+</h2>
+Games API returns the games in the store as JSON. No login required.
+<h4 class="page-header">Example URLs</h4>
+<p><a href={% url "api-v1-games" %}>
+        {% url "api-v1-games" %}
+</a></p>
+<p><a href={% url "api-v1-games" %}?tags=puzzle&callback=my_callback>
+        {% url "api-v1-games" %}?tags=puzzle,shooter&callback=my_callback
+</a></p>
+<h4 class="page-header">Params</h4>
+<dl class="row">
+    <dt class="col-sm-2">tags <small>(optional)</small></dt>
+    <dd class="col-sm-9">Games that have at least one of these tags will be included in the result</dd>
+    <dt class="col-sm-2">callback <small>(optional)</small></dt>
+    <dd class="col-sm-9">Name of the function to use as a callback</dd>
+</dl>
+<h4 class="page-header">Sample Response</h4>
+<pre><code>{
+    "games": [
+        {
+            "id": 3,
+            "name": "Sudoku Shooter",
+            "price": "10.00",
+            "tags": [
+                "puzzle",
+                "shooter",
+                "mouse only"
+            ]
+        },
+        {
+            "id": 25,
+            "name": "MinesweeperXtreme",
+            "price": "15.00",
+            "tags": [
+                "puzzle",
+                "mouse only",
+                "minesweeper"
+            ]
+        }
+    ]
+}
+</code></pre>
+
+
+<h2 class="page-header" id="Scores">
+    Scores API
+</h2>
+Scores API can be used to fetch highscores as JSON. No login required.
+<h4 class="page-header">Example URLs</h4>
+<p><a href={% url "api-v1-scores" %}?game=1&min=100&max_results=10>
+        {% url "api-v1-scores" %}?game=1&min=100&max_results=10
+</a></p>
+
+<h4 class="page-header">Params</h4>
+<dl class="row">
+    <dt class="col-sm-2">game <small>(required)</small></dt>
+    <dd class="col-sm-9">ID of the game</dd>
+    <dt class="col-sm-2">min <small>(optional)</small></dt>
+    <dd class="col-sm-9">Minimum score</dd>
+    <dt class="col-sm-2">max_results <small>(optional)</small></dt>
+    <dd class="col-sm-9">Maximum number of results to show (default: 10)</dd>
+    <dt class="col-sm-2">callback <small>(optional)</small></dt>
+    <dd class="col-sm-9">Name of the function to use as a callback</dd>
+</dl>
+<h4 class="page-header">Sample Response</h4>
+<pre><code>{
+    "high_scores": {
+        "1": {
+            "player": {
+                "id": 1,
+                "name": "pro_player666"
+            },
+            "score": 1030
+        },
+        "2": {
+            "player": {
+                "id": 4,
+                "name": "Pentti"
+            },
+            "score": 260
+        }
+    }
+}
+</code></pre>
+
+<h2 class="page-header" id="Sales">
+    Sales API
+</h2>
+Sales API can be used to fetch sales statistics as JSON. Requires login. You can only get sales statistics of the games you've uploaded yourself.
+<h4 class="page-header">Example URLs</h4>
+<p><a href={% url "api-v1-sales" %}?games=1&callback=my_cb>
+        {% url "api-v1-sales" %}?games=1&callback=my_cb
+</a></p>
+<p><a href={% url "api-v1-sales" %}?games=1,2&from=2018-04-20&to=2018-05-01>
+        {% url "api-v1-sales" %}?games=1,2&from=2018-04-20&to=2018-05-01
+</a></p>
+<h4 class="page-header">Params</h4>
+<dl class="row">
+    <dt class="col-sm-2">games <small>(required)</small></dt>
+    <dd class="col-sm-9">IDs of the game(s) to include separated by commas</dd>
+    <dt class="col-sm-2">from <small>(optional)</small></dt>
+    <dd class="col-sm-9">The first date to include in sales statistics (yyyy-mm-dd)</dd>
+    <dt class="col-sm-2">to <small>(optional)</small></dt>
+    <dd class="col-sm-9">The last date to include in sales statistics (yyyy-mm-dd)</dd>
+    <dt class="col-sm-2">callback <small>(optional)</small></dt>
+    <dd class="col-sm-9">Name of the function to use as a callback</dd>
+</dl>
+<h4 class="page-header">Sample Response</h4>
+<pre><code>{
+    "games": [
+        {
+            "id": 3,
+            "name": "Sudoku Shooter",
+            "sales": [
+                {
+                    "time_of_purchase": "2018-04-24T11:07:13.100Z",
+                    "price_paid": "10.00"
+                },
+                {
+                    "time_of_purchase": "2018-04-24T11:07:23.263Z",
+                    "price_paid": "10.00"
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+
+{% endblock %}

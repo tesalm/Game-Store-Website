@@ -1,0 +1,81 @@
+{% extends "main.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block head %}
+<script>
+$(document).ready(function(){
+$("#collection").click(function(){
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+        method: "POST",
+        data: {'type': "collection", 'csrfmiddlewaretoken': csrftoken},
+        success: function(response) {
+            $("#gamelist").html("");
+            $("#dash_heading").html("Game Collection");
+            $('#gamelist').append(response);
+        },
+    });
+});
+$("#uploaded").click(function(){
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+        method: "POST",
+        data: {'type': "uploaded", 'csrfmiddlewaretoken': csrftoken},
+        success: function(response) {
+            $("#gamelist").html("");
+            $("#dash_heading").html("Uploaded Games");
+            $('#gamelist').append(response);
+        },
+    });
+});
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    } return cookieValue;
+}
+});
+</script>
+{% endblock%}
+
+{% block content %}
+
+{% if user.reguser.developer == True %}
+    <ul class="nav nav-pills">
+      <li><a href="javascript:void(0)" id="collection"><span class="glyphicon glyphicon-book"></span> Collection</a></li>
+      <li><a href="javascript:void(0)" id="uploaded"><span class="glyphicon glyphicon-stats"></span> Uploaded Games & Sales</a></li>
+      <li><a href="{% url 'game_upload' %}"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Game</a></li>
+      <li><a href="{% url 'api-v1' %}"><span class="glyphicon glyphicon-cloud"></span>
+        API Reference</a></li>
+	</ul>
+{% endif %}
+
+<h3 id="dash_heading" style="padding-left:15px">Game Collection</h3><br>
+<div id="gamelist">
+   {% for g in games %}
+      <div id="games" class="col-sm6 col-md-4">
+         <a href="{% url 'play' g.game.pk %}" class="thumbnail">
+            {% if g.game.logo %}
+               {% load cloudinary %}
+               {% cloudinary g.game.logo format="jpg" width=240 height=120 crop="limit" %}
+            {% endif %}
+            <div class="caption">
+               <h3>{{ g.game.name }}</h3>
+               <p>{{ g.game.description|linebreaks|truncatechars:180 }}</p>
+            </div>
+         </a>
+      </div>
+   {% empty %}
+      <p style="padding-left:15px; opacity:0.4">No games</p>
+   {% endfor %}
+</div>
+
+{% endblock %}

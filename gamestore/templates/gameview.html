@@ -1,0 +1,70 @@
+{% extends "main.html" %}
+
+{% block title %} {{ game.name }} {% endblock %}
+
+
+{% block content %}
+
+<br>
+<div class="row">
+   <div class="col-lg-8">
+
+      <h1>{{ game.name }}</h1><br>
+
+      <div>
+      {% if game.banner %}
+         {% load cloudinary %}
+         {% cloudinary game.banner format="jpg" width=240 height=260 crop="limit" %}
+      {% elif not game.banner and game.logo %}
+         {% load cloudinary %}
+         {% cloudinary game.logo format="jpg" width=240 height=120 crop="limit" %}
+      {% endif %}
+      </div>
+
+      <div style="margin:20px 0px">
+      {% if owned == True or game.price == 0 %}
+         <a href="{% url 'play' game.pk %}" class="btn btn-success" role="button"> Play </a>
+      {% else %}
+         <a href="{% url 'purchase' game.pk %}" class="btn btn-primary" role="button"> Purchase </a>
+      {% endif %}
+      </div>
+
+      <ul class="list-group">
+         <li class="list-group-item"><h3 style="font-weight:bold" class="panel-title">
+            Game description
+         </h3></li>
+         <li class="list-group-item">
+            {{ game.description|linebreaks }}
+            <small style="opacity:0.6">Publisher: {{game.developer}}</small>
+         </li>
+      </ul>
+
+      <ul class="list-group">
+         <li class="list-group-item"><h3 style="font-weight:bold" class="panel-title">
+            Game reviews
+         </h3></li>
+         {% for r in reviews %}
+            <li class="list-group-item">
+               <p style="opacity:0.6">{{r.reviewer}}</p>
+               {{ r.review_text|linebreaks }}
+            </li>
+         {% empty %}
+            <li class="list-group-item"><p style="opacity:0.4">No reviews</p></li>
+         {% endfor %}
+      </ul>
+
+      {% if user.is_authenticated %}
+      <h4 style="display:inline">Write review</h4>
+      <form method="POST" action="">
+         {% csrf_token %}
+         <textarea maxlength="500" rows="4" cols="50" name="review"></textarea><br>
+         <input class="btn btn-primary" type="submit" value="Submit review">
+      </form>
+      {% else %}
+      <h4 style="display:inline">Log in to write a review</h4>
+      {% endif %}
+
+   </div>
+</div>
+
+{% endblock %}

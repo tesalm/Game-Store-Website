@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+
+{% block content %}
+  {% load cloudinary %}
+  {% load bootstrap3 %}
+  <div id='backend_upload'>
+    <form action="{% url "game_upload" %}" method="post"
+          enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+        {% bootstrap_form form %}
+      <input class="btn btn-primary" type="submit" value="Upload">
+    </form>
+  </div>  
+{% endblock %}
